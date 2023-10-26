@@ -1,10 +1,16 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
-
 const app = express();
+const nodemailer = require('nodemailer');
+const bodyParser = require('body-parser');
+
 app.use(express.json());
 app.use(cors());
+// Configure bodyParser for parsing form data
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 
 
 // MySQL database configuration
@@ -39,6 +45,7 @@ process.on('SIGINT', () => {
 
 
 
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
@@ -66,8 +73,34 @@ app.get('/get_contact', async(req, res) => {
    
 });
 
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'your_email@gmail.com', // your email@gmail.com
+    pass: 'You email account pass word||app password' // your gmail password
+  }
+});
+
 app.post('/add_contact', (req, res) => {
   const { name, email,message } = req.body; // Assuming you have a JSON object with the data to insert
+
+  // Send an email to the admin
+  const mailOptions = {
+    from: 'your_email@gmail.com', // email@gmail.com
+    to: 'admin@gmail.com', // admin@gmail.com
+    subject: 'New Submission',
+    text: `New submission received: \n Name:${name}\n Email Id:${email}\nMessage:${message}`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email: ' + error);
+      res.send('Submission failed.');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.send('Submission successful.');
+    }
+  });
 
   // Insert data into the database
   const insertQuery = 'INSERT INTO contact_us (name, email,message) VALUES (?, ?,?)';
@@ -79,5 +112,8 @@ app.post('/add_contact', (req, res) => {
       res.status(200).json({ message: 'Data inserted successfully' });
     }
   });
+
+  
+
 });
   
