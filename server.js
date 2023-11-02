@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 // MySQL database configuration
 const dbConfig = {  
   host: 'sql12.freesqldatabase.com',      // Replace with your MySQL server host
-  user: 'sql12655207',  // Replace with your MySQL username
-  password: 'qnZ9kgYAUm',  // Replace with your MySQL password
-  database: 'sql12655207',  // Replace with your MySQL database name
+  user: 'sql12657663',  // Replace with your MySQL username
+  password: 'LEGCqnlDPu',  // Replace with your MySQL password
+  database: 'sql12657663',  // Replace with your MySQL database name
 };
 
 // Create a MySQL connection
@@ -76,8 +76,8 @@ app.get('/get_contact', async(req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'your_email@gmail.com', // your email@gmail.com
-    pass: 'You email account pass word||app password' // your gmail password
+    user: 'user@gmail.com', // your email@gmail.com
+    pass: 'user password or app password' // your gmail password
   }
 });
 
@@ -86,7 +86,7 @@ app.post('/add_contact', (req, res) => {
 
   // Send an email to the admin
   const mailOptions = {
-    from: 'your_email@gmail.com', // email@gmail.com
+    from: 'user@gmail.com', // email@gmail.com
     to: 'admin@gmail.com', // admin@gmail.com
     subject: 'New Submission',
     text: `New submission received: \n Name:${name}\n Email Id:${email}\nMessage:${message}`
